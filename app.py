@@ -58,6 +58,22 @@ def init_db():
         )
     """)
 
+    # =====================================================
+    # Search History
+    # =====================================================
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS search_history (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            service TEXT NOT NULL,
+            location TEXT,
+            radius INTEGER,
+            searched_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES users(id)
+        )
+    """)
+
     connection.commit()
     cursor.close()
 
@@ -968,13 +984,19 @@ def logout():
 )
 def search_page():
 
+    # User must be logged in
+    if not session.get("user_id"):
+
+        return redirect("/login")
+
     search_type = request.form.get(
         "search_type"
     )
 
     service = request.form.get(
-        "service"
-    )
+        "service",
+        ""
+    ).strip()
 
     try:
 
@@ -1105,6 +1127,62 @@ def search_page():
 
         lat, lon = districts[district]
 
+    # =====================================================
+    # SAVE SEARCH HISTORY
+    # =====================================================
+
+    try:
+
+        user_id = session.get(
+            "user_id"
+        )
+
+        if user_id:
+
+            cursor = connection.cursor()
+
+            cursor.execute(
+                """
+                INSERT INTO search_history
+                (
+                    user_id,
+                    service,
+                    location,
+                    radius
+                )
+                VALUES (?, ?, ?, ?)
+                """,
+                (
+                    user_id,
+                    service if service else "Unknown",
+                    district,
+                    radius
+                )
+            )
+
+            connection.commit()
+
+            cursor.close()
+
+            print(
+                "SEARCH HISTORY SAVED:",
+                user_id,
+                service,
+                district,
+                radius
+            )
+
+    except Exception as e:
+
+        print(
+            "SEARCH HISTORY ERROR:",
+            e
+        )
+
+    # =====================================================
+    # Show Search Result Page
+    # =====================================================
+
     return render_template(
         "result.html",
         district=district,
@@ -1114,7 +1192,33 @@ def search_page():
         radius=radius
     )
 
+@app.route("/history")
+def history():
+    user_id = session.get("user_id")
 
+    if not user_id:
+        return redirect("/login")
+
+    cursor = connection.cursor()
+
+    cursor.execute(
+        """
+        SELECT id, service, location, radius, searched_at
+        FROM search_history
+        WHERE user_id = ?
+        ORDER BY id DESC
+        """,
+        (user_id,)
+    )
+
+    history_records = cursor.fetchall()
+
+    cursor.close()
+
+    return render_template(
+        "history.html",
+        history=history_records
+    )
 # =========================================================
 # Search Nearby Services
 # =========================================================

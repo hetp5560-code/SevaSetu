@@ -445,6 +445,22 @@ input:focus{
     }
 
 }
+.history-btn{
+    display:inline-block;
+    background:rgba(16,185,129,.9);
+    color:white;
+    padding:10px 16px;
+    border-radius:10px;
+    margin-right:8px;
+    text-decoration:none;
+    font-weight:600;
+    transition:.3s;
+}
+
+.history-btn:hover{
+    background:#059669;
+    transform:translateY(-2px);
+}
 
 /* MOBILE */
 
@@ -532,11 +548,15 @@ input:focus{
 
     <div class="profile">
 
-        <div class="profile-btn">
-            👤 {{ session.get('user_name') }} ▼
-        </div>
+    <a href="/history" class="history-btn">
+        📜 History
+    </a>
 
-        <div class="profile-menu">
+    <div class="profile-btn">
+        👤 {{ session.get('user_name') }} ▼
+    </div>
+
+    <div class="profile-menu">
 
             <p>
                 <strong>{{ session.get('user_name') }}</strong>

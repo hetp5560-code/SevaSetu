@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Search History - SevaSetu</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #eef5ff, #ffffff);
+            padding: 30px 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .header {
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            color: #2563eb;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #666;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 18px;
+            padding: 10px 18px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        .history-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+            transition: 0.3s;
+        }
+
+        .history-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(0,0,0,0.10);
+        }
+
+        .service {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2563eb;
+            text-transform: capitalize;
+            margin-bottom: 10px;
+        }
+
+        .detail {
+            color: #555;
+            margin: 6px 0;
+        }
+
+        .detail strong {
+            color: #333;
+        }
+
+        .empty {
+            background: white;
+            padding: 50px 20px;
+            text-align: center;
+            border-radius: 16px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .empty h2 {
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .empty p {
+            color: #888;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 15px;
+            }
+
+            .header h1 {
+                font-size: 26px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1>🔎 Search History</h1>
+
+        <p>
+            Your previous searches on SevaSetu
+        </p>
+
+        <a href="/home" class="back-btn">
+            ← Back to Home
+        </a>
+    </div>
+
+
+    {% if history %}
+
+        {% for item in history %}
+
+        <div class="history-card">
+
+            <div class="service">
+                {{ item["service"] }}
+            </div>
+
+            <div class="detail">
+                <strong>📍 Location:</strong>
+                {{ item["location"] or "Not specified" }}
+            </div>
+
+            <div class="detail">
+                <strong>📏 Radius:</strong>
+                {{ item["radius"] }} meters
+            </div>
+
+            <div class="detail">
+                <strong>🕒 Searched At:</strong>
+                {{ item["searched_at"] }}
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <div class="empty">
+
+            <h2>No Search History Yet</h2>
+
+            <p>
+                Your searches will appear here after you search for a service.
+            </p>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>
