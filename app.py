@@ -301,7 +301,7 @@ def forgot_password():
 
             msg = Message(
                 subject="SevaSetu - Password Reset OTP",
-                sender=app.config["MAIL_USERNAME"],
+                sender="smartnearby.app@gmail.com",
                 recipients=[email]
             )
 
@@ -738,7 +738,7 @@ def signup():
 
             msg = Message(
                 subject="SevaSetu - Email Verification",
-                sender=app.config["MAIL_USERNAME"],
+                sender="smartnearby.app@gmail.com",
                 recipients=[email]
             )
 
