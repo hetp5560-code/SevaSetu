@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Verify OTP - SevaSetu</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            background:
+                linear-gradient(
+                    rgba(5, 20, 45, 0.72),
+                    rgba(10, 40, 80, 0.78)
+                ),
+                url("https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=2000&q=85");
+
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+
+            overflow: hidden;
+        }
+
+        /* Floating Background Circles */
+
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.10);
+            backdrop-filter: blur(4px);
+            animation: float 8s infinite ease-in-out;
+        }
+
+        .circle.one {
+            width: 180px;
+            height: 180px;
+            top: 7%;
+            left: 7%;
+        }
+
+        .circle.two {
+            width: 130px;
+            height: 130px;
+            bottom: 10%;
+            right: 8%;
+            animation-delay: 2s;
+        }
+
+        .circle.three {
+            width: 65px;
+            height: 65px;
+            top: 18%;
+            right: 18%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-25px);
+            }
+        }
+
+        /* Main Card */
+
+        .otp-card {
+            position: relative;
+            width: 430px;
+            padding: 42px 40px;
+
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(15px);
+
+            border-radius: 25px;
+
+            box-shadow:
+                0 25px 60px rgba(0, 0, 0, 0.35);
+
+            animation: cardShow 0.8s ease;
+
+            z-index: 5;
+        }
+
+        @keyframes cardShow {
+            from {
+                opacity: 0;
+                transform: translateY(50px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* OTP Icon */
+
+        .otp-icon {
+            width: 75px;
+            height: 75px;
+
+            margin: 0 auto 18px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            background: linear-gradient(
+                135deg,
+                #2864e8,
+                #6b8cff
+            );
+
+            border-radius: 50%;
+
+            font-size: 34px;
+
+            box-shadow:
+                0 10px 25px rgba(40, 100, 232, 0.35);
+
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.08);
+            }
+        }
+
+        h1 {
+            text-align: center;
+            color: #2864e8;
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 15px;
+            line-height: 1.5;
+            margin-bottom: 28px;
+        }
+
+        /* OTP Input */
+
+        .otp-label {
+            display: block;
+            text-align: center;
+
+            font-size: 14px;
+            font-weight: 600;
+
+            color: #333;
+
+            margin-bottom: 10px;
+        }
+
+        .otp-input {
+            width: 100%;
+
+            padding: 17px;
+
+            text-align: center;
+
+            font-size: 27px;
+            font-weight: bold;
+
+            letter-spacing: 10px;
+
+            border: 1px solid #ddd;
+            border-radius: 12px;
+
+            outline: none;
+
+            background: #fafafa;
+
+            transition: 0.3s;
+        }
+
+        .otp-input:focus {
+            border-color: #2864e8;
+
+            background: white;
+
+            box-shadow:
+                0 0 0 4px rgba(40, 100, 232, 0.12);
+
+            transform: translateY(-2px);
+        }
+
+        /* Verify Button */
+
+        .verify-btn {
+            width: 100%;
+
+            padding: 16px;
+
+            margin-top: 20px;
+
+            border: none;
+            border-radius: 12px;
+
+            background: linear-gradient(
+                90deg,
+                #2864e8,
+                #5c7cff,
+                #2864e8
+            );
+
+            background-size: 200% auto;
+
+            color: white;
+
+            font-size: 17px;
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.3s;
+
+            animation: gradientMove 3s linear infinite;
+        }
+
+        @keyframes gradientMove {
+            0% {
+                background-position: 0% center;
+            }
+
+            100% {
+                background-position: 200% center;
+            }
+        }
+
+        .verify-btn:hover {
+            transform: translateY(-3px);
+
+            box-shadow:
+                0 10px 25px rgba(40, 100, 232, 0.35);
+        }
+
+        .verify-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Resend */
+
+        .resend {
+            text-align: center;
+            margin-top: 22px;
+
+            font-size: 14px;
+            color: #777;
+        }
+
+        .resend a {
+            color: #2864e8;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .resend a:hover {
+            text-decoration: underline;
+        }
+
+        /* Back */
+
+        .back-login {
+            text-align: center;
+            margin-top: 18px;
+        }
+
+        .back-login a {
+            color: #2864e8;
+            text-decoration: none;
+            font-weight: 600;
+
+            transition: 0.3s;
+        }
+
+        .back-login a:hover {
+            color: #174bbd;
+        }
+
+        /* Security */
+
+        .security {
+            text-align: center;
+
+            margin-top: 22px;
+
+            font-size: 12px;
+            color: #777;
+        }
+
+        /* Mobile */
+
+        @media (max-width: 500px) {
+
+            .otp-card {
+                width: 90%;
+                padding: 35px 25px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+
+            .otp-input {
+                font-size: 23px;
+                letter-spacing: 7px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- Animated Background -->
+
+    <div class="circle one"></div>
+    <div class="circle two"></div>
+    <div class="circle three"></div>
+
+
+    <!-- OTP Card -->
+
+    <div class="otp-card">
+
+        <div class="otp-icon">
+            🔢
+        </div>
+
+        <h1>Verify OTP</h1>
+
+        <p class="subtitle">
+            We have sent a 6-digit OTP to your registered email.
+            Enter it below to continue.
+        </p>
+
+
+        <form method="POST">
+
+            <label class="otp-label">
+                Enter 6-Digit OTP
+            </label>
+
+            <input
+                type="text"
+                name="otp"
+                class="otp-input"
+                placeholder="••••••"
+                maxlength="6"
+                pattern="[0-9]{6}"
+                inputmode="numeric"
+                autocomplete="one-time-code"
+                required
+            >
+
+
+            <button type="submit" class="verify-btn">
+                🔓 Verify OTP
+            </button>
+
+        </form>
+
+
+        <div class="resend">
+            Didn't receive the OTP?
+            <a href="/forgot-password">
+                Send Again
+            </a>
+        </div>
+
+
+        <div class="back-login">
+            <a href="/login">
+                ← Back to Login
+            </a>
+        </div>
+
+
+        <div class="security">
+            🔒 Your verification is secure
+        </div>
+
+    </div>
+
+</body>
+</html>

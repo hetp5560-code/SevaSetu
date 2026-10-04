@@ -1,0 +1,680 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Verify OTP | SevaSetu</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+
+    background:
+        radial-gradient(circle at 20% 20%, rgba(37,99,235,.35), transparent 30%),
+        radial-gradient(circle at 80% 80%, rgba(99,102,241,.3), transparent 30%),
+        linear-gradient(135deg, #020617, #0f172a, #172554);
+}
+
+/* Animated background */
+.bg-circle {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(2px);
+    opacity: .35;
+    animation: float 8s ease-in-out infinite;
+}
+
+.circle1 {
+    width: 180px;
+    height: 180px;
+    background: #2563eb;
+    top: 8%;
+    left: 8%;
+}
+
+.circle2 {
+    width: 250px;
+    height: 250px;
+    background: #7c3aed;
+    bottom: -60px;
+    right: 5%;
+    animation-delay: 2s;
+}
+
+.circle3 {
+    width: 100px;
+    height: 100px;
+    background: #06b6d4;
+    top: 60%;
+    left: 15%;
+    animation-delay: 4s;
+}
+
+@keyframes float {
+    0%,100% {
+        transform: translateY(0) translateX(0);
+    }
+    50% {
+        transform: translateY(-35px) translateX(20px);
+    }
+}
+
+/* Main card */
+.card {
+    position: relative;
+    z-index: 5;
+
+    width: 460px;
+    padding: 42px 38px;
+
+    border: 1px solid rgba(255,255,255,.15);
+    border-radius: 28px;
+
+    background: rgba(255,255,255,.09);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+
+    box-shadow:
+        0 30px 80px rgba(0,0,0,.45),
+        inset 0 1px 1px rgba(255,255,255,.15);
+
+    animation: cardIn .8s cubic-bezier(.2,.8,.2,1);
+}
+
+@keyframes cardIn {
+    from {
+        opacity: 0;
+        transform: translateY(50px) scale(.92);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Lock */
+.lock-wrapper {
+    width: 85px;
+    height: 85px;
+
+    margin: 0 auto 22px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: rgba(37,99,235,.18);
+    border: 1px solid rgba(96,165,250,.35);
+
+    animation: pulse 2s infinite;
+}
+
+.lock {
+    font-size: 38px;
+    animation: lockFloat 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%,100% {
+        box-shadow: 0 0 0 0 rgba(37,99,235,.35);
+    }
+    50% {
+        box-shadow: 0 0 0 18px rgba(37,99,235,0);
+    }
+}
+
+@keyframes lockFloat {
+    0%,100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+h1 {
+    text-align: center;
+    color: white;
+    font-size: 27px;
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    text-align: center;
+    color: #cbd5e1;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.email {
+    color: #60a5fa;
+    font-weight: 600;
+    word-break: break-all;
+}
+
+/* OTP */
+.otp-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 30px 0 20px;
+}
+
+.otp-input {
+    width: 50px;
+    height: 58px;
+
+    border: 1px solid rgba(255,255,255,.2);
+    border-radius: 13px;
+
+    background: rgba(255,255,255,.08);
+    color: white;
+
+    text-align: center;
+    font-size: 23px;
+    font-weight: 600;
+
+    outline: none;
+
+    transition:
+        transform .2s,
+        border-color .2s,
+        background .2s,
+        box-shadow .2s;
+}
+
+.otp-input:focus {
+    border-color: #60a5fa;
+    background: rgba(37,99,235,.18);
+
+    transform: translateY(-5px) scale(1.05);
+
+    box-shadow:
+        0 8px 25px rgba(37,99,235,.25);
+}
+
+.otp-input.filled {
+    border-color: #60a5fa;
+    background: rgba(37,99,235,.16);
+}
+
+/* Timer */
+.timer {
+    text-align: center;
+    color: #94a3b8;
+    font-size: 13px;
+    margin-bottom: 22px;
+}
+
+.timer span {
+    color: #60a5fa;
+    font-weight: 600;
+}
+
+/* Button */
+.verify-btn {
+    width: 100%;
+    height: 54px;
+
+    border: none;
+    border-radius: 13px;
+
+    background: linear-gradient(135deg, #2563eb, #4f46e5);
+
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    box-shadow: 0 10px 25px rgba(37,99,235,.3);
+
+    transition: .25s;
+}
+
+.verify-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(37,99,235,.4);
+}
+
+.verify-btn:active {
+    transform: scale(.97);
+}
+
+/* Back */
+.back {
+    display: block;
+    margin-top: 22px;
+
+    text-align: center;
+
+    color: #94a3b8;
+    text-decoration: none;
+
+    font-size: 13px;
+
+    transition: .2s;
+}
+
+.back:hover {
+    color: white;
+}
+
+/* Shake */
+.shake {
+    animation: shake .45s;
+}
+
+@keyframes shake {
+    0%,100% { transform: translateX(0); }
+    20% { transform: translateX(-10px); }
+    40% { transform: translateX(10px); }
+    60% { transform: translateX(-7px); }
+    80% { transform: translateX(7px); }
+}
+
+/* Success */
+.success {
+    display: none;
+
+    position: absolute;
+    inset: 0;
+
+    border-radius: 28px;
+
+    background: rgba(15,23,42,.97);
+
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    z-index: 20;
+}
+
+.success.show {
+    display: flex;
+    animation: successIn .4s ease;
+}
+
+@keyframes successIn {
+    from {
+        opacity: 0;
+        transform: scale(.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.check {
+    width: 80px;
+    height: 80px;
+
+    border-radius: 50%;
+
+    background: #22c55e;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    color: white;
+    font-size: 40px;
+
+    animation: checkPop .5s cubic-bezier(.2,1.5,.5,1);
+}
+
+@keyframes checkPop {
+    from {
+        transform: scale(0);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
+.success h2 {
+    color: white;
+    margin-top: 20px;
+}
+
+.success p {
+    color: #94a3b8;
+    margin-top: 5px;
+}
+
+/* Mobile */
+@media(max-width:520px) {
+
+    .card {
+        width: calc(100% - 30px);
+        padding: 35px 20px;
+    }
+
+    .otp-container {
+        gap: 6px;
+    }
+
+    .otp-input {
+        width: 43px;
+        height: 53px;
+    }
+
+    h1 {
+        font-size: 23px;
+    }
+}
+
+@media(max-width:370px) {
+
+    .otp-input {
+        width: 39px;
+        height: 50px;
+    }
+
+    .otp-container {
+        gap: 4px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg-circle circle1"></div>
+<div class="bg-circle circle2"></div>
+<div class="bg-circle circle3"></div>
+
+<div class="card" id="card">
+
+    <div class="lock-wrapper">
+        <div class="lock">🔐</div>
+    </div>
+
+    <h1>Verify Your Email</h1>
+
+    <p class="subtitle">
+        We've sent a 6-digit verification code to
+        <br>
+        <span class="email">{{ email }}</span>
+    </p>
+
+    <form method="POST" id="otpForm">
+
+        <div class="otp-container">
+
+            <input class="otp-input"
+                   type="text"
+                   maxlength="1"
+                   inputmode="numeric"
+                   autocomplete="one-time-code"
+                   required>
+
+            <input class="otp-input"
+                   type="text"
+                   maxlength="1"
+                   inputmode="numeric"
+                   required>
+
+            <input class="otp-input"
+                   type="text"
+                   maxlength="1"
+                   inputmode="numeric"
+                   required>
+
+            <input class="otp-input"
+                   type="text"
+                   maxlength="1"
+                   inputmode="numeric"
+                   required>
+
+            <input class="otp-input"
+                   type="text"
+                   maxlength="1"
+                   inputmode="numeric"
+                   required>
+
+            <input class="otp-input"
+                   type="text"
+                   maxlength="1"
+                   inputmode="numeric"
+                   required>
+
+        </div>
+
+        <!-- Flask ne aa single value receive thase -->
+        <input type="hidden" name="otp" id="otpValue">
+
+        <div class="timer">
+            OTP expires in <span id="timer">05:00</span>
+        </div>
+
+        <button type="submit" class="verify-btn">
+            Verify OTP
+        </button>
+
+    </form>
+
+    <a href="/signup" class="back">
+        ← Back to Sign Up
+    </a>
+
+    <div class="success" id="successScreen">
+        <div class="check">✓</div>
+        <h2>Verified!</h2>
+        <p>Your email has been successfully verified.</p>
+    </div>
+
+</div>
+
+<script>
+
+/* =========================
+   OTP INPUT SYSTEM
+========================= */
+
+const inputs = document.querySelectorAll(".otp-input");
+const otpValue = document.getElementById("otpValue");
+
+inputs[0].focus();
+
+inputs.forEach((input, index) => {
+
+    input.addEventListener("input", function () {
+
+        this.value = this.value.replace(/[^0-9]/g, "");
+
+        if (this.value) {
+
+            this.classList.add("filled");
+
+            if (index < inputs.length - 1) {
+                inputs[index + 1].focus();
+            }
+        }
+
+        updateOTP();
+    });
+
+    input.addEventListener("keydown", function (event) {
+
+        if (
+            event.key === "Backspace" &&
+            this.value === "" &&
+            index > 0
+        ) {
+            inputs[index - 1].focus();
+            inputs[index - 1].value = "";
+            inputs[index - 1].classList.remove("filled");
+        }
+
+        updateOTP();
+    });
+
+    /*
+       Arrow navigation
+    */
+
+    input.addEventListener("keydown", function(event) {
+
+        if (event.key === "ArrowLeft" && index > 0) {
+            inputs[index - 1].focus();
+        }
+
+        if (
+            event.key === "ArrowRight" &&
+            index < inputs.length - 1
+        ) {
+            inputs[index + 1].focus();
+        }
+
+    });
+
+});
+
+
+/* =========================
+   OTP PASTE SUPPORT
+========================= */
+
+inputs[0].addEventListener("paste", function(event) {
+
+    event.preventDefault();
+
+    const pasted = event.clipboardData
+        .getData("text")
+        .replace(/\D/g, "")
+        .slice(0, 6);
+
+    pasted.split("").forEach((digit, index) => {
+
+        if (inputs[index]) {
+            inputs[index].value = digit;
+            inputs[index].classList.add("filled");
+        }
+
+    });
+
+    updateOTP();
+
+    if (pasted.length === 6) {
+        inputs[5].focus();
+    }
+});
+
+
+/* =========================
+   COMBINE OTP
+========================= */
+
+function updateOTP() {
+
+    let otp = "";
+
+    inputs.forEach(input => {
+        otp += input.value;
+    });
+
+    otpValue.value = otp;
+}
+
+
+/* =========================
+   FORM ANIMATION
+========================= */
+
+document.getElementById("otpForm").addEventListener(
+    "submit",
+    function(event) {
+
+        updateOTP();
+
+        if (otpValue.value.length !== 6) {
+
+            event.preventDefault();
+
+            const card = document.getElementById("card");
+
+            card.classList.remove("shake");
+
+            void card.offsetWidth;
+
+            card.classList.add("shake");
+
+            return;
+        }
+
+        /*
+           Backend OTP verification still happens normally.
+           Animation is only visual.
+        */
+
+        document.getElementById("successScreen")
+            .classList.add("show");
+    }
+);
+
+
+/* =========================
+   COUNTDOWN TIMER
+========================= */
+
+let totalSeconds = 5 * 60;
+
+const timerElement = document.getElementById("timer");
+
+function updateTimer() {
+
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+
+    timerElement.textContent =
+        String(minutes).padStart(2, "0") +
+        ":" +
+        String(seconds).padStart(2, "0");
+
+    if (totalSeconds <= 0) {
+
+        timerElement.textContent = "Expired";
+
+        inputs.forEach(input => {
+            input.disabled = true;
+        });
+
+        document.querySelector(".verify-btn").disabled = true;
+
+        document.querySelector(".verify-btn").style.opacity = ".5";
+
+        return;
+    }
+
+    totalSeconds--;
+}
+
+updateTimer();
+
+setInterval(updateTimer, 1000);
+
+</script>
+
+</body>
+</html>
+```

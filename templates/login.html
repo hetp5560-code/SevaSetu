@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Login | SevaSetu</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.45)),
+url("https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1600&q=80");
+background-size:cover;
+background-position:center;
+}
+
+.box{
+width:420px;
+background:#fff;
+padding:35px;
+border-radius:18px;
+box-shadow:0 15px 40px rgba(0,0,0,.3);
+}
+
+h2{
+text-align:center;
+margin-bottom:25px;
+color:#2563eb;
+}
+
+input{
+width:100%;
+padding:14px;
+margin-bottom:18px;
+border:1px solid #ddd;
+border-radius:10px;
+font-size:16px;
+outline:none;
+}
+
+input:focus{
+border-color:#2563eb;
+}
+
+button{
+width:100%;
+padding:14px;
+border:none;
+border-radius:10px;
+background:#2563eb;
+color:#fff;
+font-size:17px;
+cursor:pointer;
+transition:.3s;
+}
+
+button:hover{
+background:#1d4ed8;
+}
+
+p{
+margin-top:18px;
+text-align:center;
+}
+
+a{
+color:#2563eb;
+text-decoration:none;
+font-weight:600;
+}
+.login-error {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 15px;
+    margin-bottom: 18px;
+    border-radius: 12px;
+    background: rgba(255, 70, 70, 0.12);
+    border: 1px solid rgba(255, 80, 80, 0.5);
+    color: #ff6b6b;
+    animation: errorShake 0.4s ease;
+}
+
+.error-icon {
+    font-size: 24px;
+}
+
+.login-error strong {
+    display: block;
+    font-size: 14px;
+}
+
+.login-error p {
+    margin: 3px 0 0;
+    font-size: 12px;
+    color: #bbb;
+}
+
+@keyframes errorShake {
+    0%   { transform: translateX(0); }
+    25%  { transform: translateX(-7px); }
+    50%  { transform: translateX(7px); }
+    75%  { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="box">
+{% if error %}
+<div class="login-error">
+    <span class="error-icon">⚠️</span>
+    <div>
+        <strong>Invalid Email or Password</strong>
+        <p>Please check your email and password and try again.</p>
+    </div>
+</div>
+{% endif %}
+<h2>Login</h2>
+
+<form method="POST">
+
+<input
+type="email"
+name="email"
+placeholder="Enter Email"
+required>
+
+<input
+type="password"
+name="password"
+placeholder="Enter Password"
+required>
+<a href="/forgot-password" class="forgot-btn">
+    🔑 Forgot Password
+</a>
+<button type="submit">
+Login
+</button>
+
+</form>
+
+<p>
+Don't have an account?
+<a href="/signup">Create Account</a>
+</p>
+
+<p>
+<a href="/">🏠 Back to Home</a>
+</p>
+
+</div>
+
+</body>
+</html>

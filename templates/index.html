@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SevaSetu</title>
+
+    <link rel="stylesheet"
+    href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            text-align:center;
+        }
+
+        #map{
+            height:500px;
+            width:90%;
+            margin:auto;
+            margin-top:20px;
+        }
+
+        button{
+            padding:10px 20px;
+            font-size:18px;
+            cursor:pointer;
+           
+
+
+
+            
+        }
+        #results{
+    width:90%;
+    margin:20px auto;
+
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    gap:20px;
+}
+
+.card{
+    border:1px solid #ddd;
+    border-radius:10px;
+    padding:15px;
+    background:#f8f8f8;
+    box-shadow:0 2px 8px rgba(0,0,0,0.2);
+}
+    </style>
+</head>
+<body>
+
+<h1>SevaSetu</h1>
+<select id="serviceType">
+    <option value="hospital">Hospital</option>
+    <option value="cafe">Cafe</option>
+    <option value="hotel">Hotel</option>
+    <option value="fuel">Petrol Pump</option>
+</select>
+
+<button onclick="getLocation()">
+    Search Nearby
+</button>
+
+<p id="location"></p>
+<div id="results"></div>
+
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+
+let map = L.map('map').setView([20.5937, 78.9629], 5);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+}).addTo(map);
+function calculateDistance(lat1, lon1, lat2, lon2) {
+
+    const R = 6371;
+
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+
+    const a =
+        Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.cos(lat1 * Math.PI / 180) *
+        Math.cos(lat2 * Math.PI / 180) *
+        Math.sin(dLon/2) * Math.sin(dLon/2);
+
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+    return (R * c).toFixed(2);
+}
+
+function getLocation() {
+
+    navigator.geolocation.getCurrentPosition(function(position){
+
+        let lat = position.coords.latitude;
+        let lon = position.coords.longitude;
+
+        document.getElementById("location").innerHTML =
+        "Latitude: " + lat + "<br>Longitude: " + lon;
+
+        map.setView([lat, lon], 13);
+
+        L.marker([lat, lon])
+        .addTo(map)
+        .bindPopup("You are here")
+        .openPopup();
+        let service = document.getElementById("serviceType").value;
+
+fetch('/search', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        lat: lat,
+        lon: lon,
+        service: service
+    })
+})
+.then(response => response.json())
+.then(data => {
+
+    let html = "<h3>Nearby Results</h3>";
+
+   data.forEach(place => {
+
+    let distance = calculateDistance(
+        lat,
+        lon,
+        place.lat,
+        place.lon
+    );
+    L.marker([place.lat, place.lon])
+    .addTo(map)
+    .bindPopup(`
+    <b>${place.name}</b><br>
+    📍 ${place.address}<br><br>
+
+    <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.name)}"
+   target="_blank">
+   🚗 Open in Google Maps
+</a>
+`);
+
+     html += `
+<div class="card">
+    <h3>${place.name}</h3>
+
+    <p>📍 ${place.address}</p>
+
+    <p>📏 ${distance} KM Away</p>
+</div>
+`;
+
+    });
+
+    document.getElementById("results").innerHTML = html;
+
+});
+
+    });
+
+}
+
+</script>
+
+</body>
+</html>

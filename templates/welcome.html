@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SevaSetu</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: #07111f;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        /* ---------- NAVBAR ---------- */
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 75px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 7%;
+            z-index: 1000;
+
+            background: rgba(7, 17, 31, 0.75);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #55d6ff;
+        }
+
+        .logo span {
+            color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 15px;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #55d6ff;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            text-decoration: none;
+            padding: 10px 18px;
+            border-radius: 25px;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .login-btn {
+            color: white;
+            border: 1px solid #55d6ff;
+        }
+
+        .login-btn:hover {
+            background: #55d6ff;
+            color: #07111f;
+        }
+
+        .signup-btn {
+            background: linear-gradient(135deg, #55d6ff, #7b61ff);
+            color: white;
+        }
+
+        .signup-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(85,214,255,0.35);
+        }
+
+        /* ---------- HERO ---------- */
+
+        .hero {
+            min-height: 100vh;
+            padding: 140px 7% 80px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 50px;
+
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 650px;
+            z-index: 2;
+        }
+
+        .small-title {
+            color: #55d6ff;
+            font-size: 15px;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: clamp(45px, 6vw, 75px);
+            line-height: 1.05;
+            margin-bottom: 25px;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(90deg, #55d6ff, #8d6bff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            color: #b8c3d1;
+            font-size: 18px;
+            line-height: 1.7;
+            max-width: 600px;
+            margin-bottom: 35px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .main-btn {
+            padding: 14px 28px;
+            border-radius: 30px;
+            background: linear-gradient(135deg, #55d6ff, #7b61ff);
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .main-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 35px rgba(85,214,255,0.3);
+        }
+
+        .outline-btn {
+            padding: 14px 28px;
+            border-radius: 30px;
+            border: 1px solid rgba(255,255,255,0.25);
+            color: white;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .outline-btn:hover {
+            border-color: #55d6ff;
+            color: #55d6ff;
+        }
+
+        /* ---------- HERO CARD ---------- */
+
+        .hero-card {
+            width: 390px;
+            min-height: 420px;
+
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.12);
+            backdrop-filter: blur(20px);
+
+            border-radius: 30px;
+            padding: 30px;
+
+            box-shadow: 0 25px 80px rgba(0,0,0,0.35);
+
+            animation: floating 4s ease-in-out infinite;
+            z-index: 2;
+        }
+
+        .location-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 40px;
+
+            background: linear-gradient(135deg, #55d6ff, #7b61ff);
+            margin-bottom: 25px;
+        }
+
+        .hero-card h2 {
+            margin-bottom: 12px;
+            font-size: 28px;
+        }
+
+        .hero-card p {
+            font-size: 15px;
+            color: #aeb9c8;
+            line-height: 1.6;
+        }
+
+        .mini-services {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .mini-service {
+            padding: 15px;
+            border-radius: 15px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .mini-service span {
+            font-size: 25px;
+        }
+
+        .mini-service p {
+            margin-top: 5px;
+            font-size: 13px;
+        }
+
+        /* ---------- BACKGROUND CIRCLES ---------- */
+
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(2px);
+            opacity: 0.3;
+        }
+
+        .circle.one {
+            width: 350px;
+            height: 350px;
+            background: #155dff;
+            top: -150px;
+            left: -100px;
+            animation: moveOne 8s infinite alternate ease-in-out;
+        }
+
+        .circle.two {
+            width: 300px;
+            height: 300px;
+            background: #8b35ff;
+            right: -100px;
+            bottom: -100px;
+            animation: moveTwo 9s infinite alternate ease-in-out;
+        }
+
+        /* ---------- SERVICES ---------- */
+
+        .services {
+            padding: 100px 7%;
+            background: #091525;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .section-subtitle {
+            color: #9eabbc;
+            margin-bottom: 50px;
+        }
+
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .service-card {
+            padding: 30px 20px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            transition: 0.35s;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            border-color: #55d6ff;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+        }
+
+        .service-icon {
+            font-size: 45px;
+            margin-bottom: 18px;
+        }
+
+        .service-card h3 {
+            margin-bottom: 10px;
+        }
+
+        .service-card p {
+            color: #9eabbc;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* ---------- ABOUT ---------- */
+
+        .about {
+            padding: 100px 7%;
+            text-align: center;
+        }
+
+        .about p {
+            max-width: 800px;
+            margin: auto;
+            color: #aeb9c8;
+            line-height: 1.8;
+            font-size: 17px;
+        }
+
+        /* ---------- CONTACT ---------- */
+
+        .contact {
+            padding: 90px 7%;
+            text-align: center;
+            background: linear-gradient(
+                135deg,
+                rgba(85,214,255,0.08),
+                rgba(123,97,255,0.08)
+            );
+        }
+
+        .contact p {
+            color: #aeb9c8;
+            margin: 15px 0 30px;
+        }
+
+        /* ---------- FOOTER ---------- */
+
+        footer {
+            padding: 25px;
+            text-align: center;
+            background: #050c16;
+            color: #77869a;
+            font-size: 14px;
+        }
+
+        /* ---------- ANIMATIONS ---------- */
+
+        @keyframes floating {
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        @keyframes moveOne {
+            from {
+                transform: translate(0,0);
+            }
+
+            to {
+                transform: translate(100px,80px);
+            }
+        }
+
+        @keyframes moveTwo {
+            from {
+                transform: translate(0,0);
+            }
+
+            to {
+                transform: translate(-100px,-80px);
+            }
+        }
+
+        /* ---------- MOBILE ---------- */
+
+        @media (max-width: 900px) {
+
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                padding-top: 130px;
+            }
+
+            .hero p {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .service-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            nav {
+                padding: 0 5%;
+            }
+
+            .logo {
+                font-size: 19px;
+            }
+
+            .nav-buttons .btn {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+
+            .hero {
+                padding-left: 5%;
+                padding-right: 5%;
+            }
+
+            .hero-card {
+                width: 100%;
+            }
+
+            .service-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+
+    <nav>
+
+        <div class="logo">
+            📍 Seva<span>Setu</span>
+        </div>
+
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+
+        <div class="nav-buttons">
+
+            <a href="{{ url_for('login') }}" class="btn login-btn">
+                Login
+            </a>
+
+            <a href="{{ url_for('signup') }}" class="btn signup-btn">
+                Sign Up
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- HERO -->
+
+    <section class="hero" id="home">
+
+        <div class="circle one"></div>
+        <div class="circle two"></div>
+
+        <div class="hero-content">
+
+            <div class="small-title">
+                SMART • FAST • NEARBY
+            </div>
+
+            <h1>
+                Find Everything
+                <span>Near You.</span>
+            </h1>
+
+            <p>
+                Discover hospitals, hotels, cafes, petrol pumps
+                and other useful services around your location.
+                Search smarter and save time with Nearby Services Finder.
+            </p>
+
+            <div class="hero-buttons">
+
+                <a href="{{ url_for('login') }}" class="main-btn">
+                    🚀 Get Started
+                </a>
+
+                <a href="#services" class="outline-btn">
+                    Explore Services
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="hero-card">
+
+            <div class="location-icon">
+                📍
+            </div>
+
+            <h2>
+                Nearby Services
+            </h2>
+
+            <p>
+                Find useful places around you with
+                location-based search.
+            </p>
+
+            <div class="mini-services">
+
+                <div class="mini-service">
+                    <span>🏥</span>
+                    <p>Hospitals</p>
+                </div>
+
+                <div class="mini-service">
+                    <span>🏨</span>
+                    <p>Hotels</p>
+                </div>
+
+                <div class="mini-service">
+                    <span>☕</span>
+                    <p>Cafes</p>
+                </div>
+
+                <div class="mini-service">
+                    <span>⛽</span>
+                    <p>Fuel</p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- SERVICES -->
+
+<section class="services" id="services">
+
+    <h2 class="section-title">
+        Explore Our Services
+    </h2>
+
+    <p class="section-subtitle">
+        Find useful places and services near you.
+    </p>
+
+    <div class="service-grid">
+
+        <!-- Healthcare -->
+        <div class="service-card">
+            <div class="service-icon">🏥</div>
+            <h3>Healthcare</h3>
+            <p>
+                Hospitals, clinics, pharmacies, dental clinics
+                and medical labs.
+            </p>
+        </div>
+
+        <!-- Food -->
+        <div class="service-card">
+            <div class="service-icon">🍽️</div>
+            <h3>Food & Restaurants</h3>
+            <p>
+                Restaurants, cafes, fast food, bakeries
+                and food places.
+            </p>
+        </div>
+
+        <!-- Hotels -->
+        <div class="service-card">
+            <div class="service-icon">🏨</div>
+            <h3>Hotels & Stay</h3>
+            <p>
+                Hotels, guest houses, lodges and resorts
+                near your location.
+            </p>
+        </div>
+
+        <!-- Fuel -->
+        <div class="service-card">
+            <div class="service-icon">⛽</div>
+            <h3>Fuel & EV</h3>
+            <p>
+                Petrol pumps, CNG stations and
+                EV charging stations.
+            </p>
+        </div>
+
+        <!-- Shopping -->
+        <div class="service-card">
+            <div class="service-icon">🛒</div>
+            <h3>Shopping</h3>
+            <p>
+                Supermarkets, malls, grocery, electronics
+                and clothing stores.
+            </p>
+        </div>
+
+        <!-- Banks -->
+        <div class="service-card">
+            <div class="service-icon">🏦</div>
+            <h3>Banks & ATM</h3>
+            <p>
+                Find nearby banks, ATMs and other
+                banking services.
+            </p>
+        </div>
+
+        <!-- Vehicle -->
+        <div class="service-card">
+            <div class="service-icon">🚗</div>
+            <h3>Vehicle Services</h3>
+            <p>
+                Car repair, bike repair, car wash
+                and parking services.
+            </p>
+        </div>
+
+        <!-- Emergency -->
+        <div class="service-card">
+            <div class="service-icon">🚨</div>
+            <h3>Emergency</h3>
+            <p>
+                Police stations, fire stations,
+                ambulance and emergency hospitals.
+            </p>
+        </div>
+
+        <!-- Education -->
+        <div class="service-card">
+            <div class="service-icon">🎓</div>
+            <h3>Education</h3>
+            <p>
+                Schools, colleges, libraries and
+                coaching classes.
+            </p>
+        </div>
+
+        <!-- Entertainment -->
+        <div class="service-card">
+            <div class="service-icon">🎬</div>
+            <h3>Entertainment</h3>
+            <p>
+                Cinemas, parks, gaming zones and
+                tourist attractions.
+            </p>
+        </div>
+
+        <!-- Personal Care -->
+        <div class="service-card">
+            <div class="service-icon">💇</div>
+            <h3>Personal Care</h3>
+            <p>
+                Salons, barber shops, gyms, spas
+                and laundry services.
+            </p>
+        </div>
+        <!-- Ice Cream & Candy -->
+<div class="service-card">
+    <div class="service-icon">🍦</div>
+    <h3>Ice Cream & Candy</h3>
+    <p>
+        Ice cream parlours, candy, desserts and sweet shops.
+    </p>
+</div>
+
+<!-- Hostel -->
+<div class="service-card">
+    <div class="service-icon">🏠</div>
+    <h3>Hostel</h3>
+    <p>
+        Hostels and student accommodation near your location.
+    </p>
+</div>
+
+<!-- PG -->
+<div class="service-card">
+    <div class="service-icon">🛏️</div>
+    <h3>PG</h3>
+    <p>
+        Paying guest accommodation and PG facilities.
+    </p>
+</div>
+
+<!-- Mall -->
+<div class="service-card">
+    <div class="service-icon">🛍️</div>
+    <h3>Mall</h3>
+    <p>
+        Shopping malls and large shopping centres near you.
+    </p>
+</div>
+
+<!-- Vehicle Showrooms -->
+<div class="service-card">
+    <div class="service-icon">🚗</div>
+    <h3>Vehicle Showrooms</h3>
+    <p>
+        Car, bike, tractor, truck and other vehicle showrooms.
+    </p>
+</div>
+
+    </div>
+
+</section>
+
+    
+
+
+    <!-- ABOUT -->
+
+    <section class="about" id="about">
+
+        <h2 class="section-title">
+            About SevaSetu
+        </h2>
+
+        <p>
+            SevaSetu is a location-based web application
+            designed to help users discover useful services around them.
+            Users can search for different places based on location and
+            distance and easily find the services they need.
+        </p>
+
+    </section>
+
+
+    <!-- CONTACT -->
+
+    <section class="contact" id="contact">
+
+        <h2 class="section-title">
+            Ready to Explore?
+        </h2>
+
+        <p>
+            Create your account and start finding useful places near you.
+        </p>
+
+        <a href="{{ url_for('signup') }}" class="main-btn">
+            Create Account
+        </a>
+
+    </section>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        © 2026 SevaSetu.
+        All Rights Reserved.
+
+    </footer>
+
+</body>
+</html>

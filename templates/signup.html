@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sign Up | SevaSetu</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            background:
+                linear-gradient(rgba(0,0,0,.45), rgba(0,0,0,.45)),
+                url("https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1600&q=80");
+
+            background-size: cover;
+            background-position: center;
+            padding: 20px;
+        }
+
+        .box {
+            width: 450px;
+            max-width: 100%;
+
+            background: #fff;
+
+            padding: 35px;
+
+            border-radius: 18px;
+
+            box-shadow: 0 15px 40px rgba(0,0,0,.3);
+        }
+
+        /* =========================
+           ERROR MESSAGE
+        ========================= */
+
+        .signup-error {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            padding: 14px 16px;
+            margin-bottom: 20px;
+
+            border-radius: 14px;
+
+            background: linear-gradient(
+                135deg,
+                rgba(255, 65, 65, 0.14),
+                rgba(255, 120, 120, 0.08)
+            );
+
+            border: 1px solid rgba(255, 70, 70, 0.55);
+
+            box-shadow: 0 5px 18px rgba(255, 60, 60, 0.12);
+
+            animation: signupErrorShake 0.45s ease;
+        }
+
+        .error-icon {
+            width: 38px;
+            height: 38px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            flex-shrink: 0;
+
+            border-radius: 50%;
+
+            background: rgba(255, 65, 65, 0.12);
+
+            font-size: 21px;
+
+            animation: errorIconPulse 1.5s infinite;
+        }
+
+        .error-content {
+            flex: 1;
+        }
+
+        .error-content strong {
+            display: block;
+
+            color: #dc2626;
+
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .error-content p {
+            margin: 4px 0 0;
+
+            color: #666;
+
+            font-size: 12px;
+            line-height: 1.5;
+
+            text-align: left;
+        }
+
+        @keyframes signupErrorShake {
+
+            0% {
+                transform: translateX(0);
+                opacity: 0;
+            }
+
+            20% {
+                transform: translateX(-7px);
+                opacity: 1;
+            }
+
+            40% {
+                transform: translateX(7px);
+            }
+
+            60% {
+                transform: translateX(-5px);
+            }
+
+            80% {
+                transform: translateX(5px);
+            }
+
+            100% {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes errorIconPulse {
+
+            0%, 100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.08);
+            }
+        }
+
+        /* =========================
+           HEADING
+        ========================= */
+
+        h2 {
+            text-align: center;
+
+            color: #2563eb;
+
+            margin-bottom: 25px;
+
+            font-size: 27px;
+            font-weight: 600;
+        }
+
+        /* =========================
+           INPUTS
+        ========================= */
+
+        input {
+            width: 100%;
+
+            padding: 14px;
+
+            margin-bottom: 18px;
+
+            border: 1px solid #ddd;
+
+            border-radius: 10px;
+
+            font-size: 16px;
+
+            outline: none;
+
+            transition: .3s;
+        }
+
+        input:focus {
+            border-color: #2563eb;
+
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, .10);
+        }
+
+        /* =========================
+           BUTTON
+        ========================= */
+
+        button {
+            width: 100%;
+
+            padding: 14px;
+
+            background: #2563eb;
+
+            color: #fff;
+
+            border: none;
+
+            border-radius: 10px;
+
+            font-size: 17px;
+            font-weight: 500;
+
+            cursor: pointer;
+
+            transition: .3s;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+
+            transform: translateY(-1px);
+
+            box-shadow: 0 7px 18px rgba(37, 99, 235, .25);
+        }
+
+        /* =========================
+           LINKS / TEXT
+        ========================= */
+
+        .box p {
+            text-align: center;
+
+            margin-top: 18px;
+
+            color: #555;
+
+            font-size: 14px;
+        }
+
+        a {
+            color: #2563eb;
+
+            text-decoration: none;
+
+            font-weight: 600;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 500px) {
+
+            .box {
+                padding: 25px 20px;
+            }
+
+            h2 {
+                font-size: 24px;
+            }
+
+            input {
+                font-size: 15px;
+            }
+
+            button {
+                font-size: 16px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <div class="box">
+
+        <!-- ERROR MESSAGE -->
+
+        {% if error %}
+
+        <div class="signup-error">
+
+            <div class="error-icon">
+                ⚠️
+            </div>
+
+            <div class="error-content">
+
+                <strong>{{ error }}</strong>
+
+                <p>
+                    {{ error_message }}
+                </p>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- SIGNUP TITLE -->
+
+        <h2>Create Account</h2>
+
+
+        <!-- SIGNUP FORM -->
+
+        <form method="POST">
+
+            <input
+                type="text"
+                name="fullname"
+                placeholder="Full Name"
+                required
+            >
+
+            <input
+                type="email"
+                name="email"
+                placeholder="Email Address"
+                required
+            >
+
+            <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                required
+            >
+
+            <button type="submit">
+                Create Account
+            </button>
+
+        </form>
+
+
+        <!-- LOGIN LINK -->
+
+        <p>
+            Already have an account?
+            <a href="/login">Login</a>
+        </p>
+
+
+        <!-- HOME LINK -->
+
+        <p>
+            <a href="/">🏠 Back to Home</a>
+        </p>
+
+    </div>
+
+</body>
+
+</html>
