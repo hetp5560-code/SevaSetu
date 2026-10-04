@@ -1192,11 +1192,18 @@ def search_page():
         radius=radius
     )
 
+
+# =========================================================
+# Search History
+# =========================================================
+
 @app.route("/history")
 def history():
+
     user_id = session.get("user_id")
 
     if not user_id:
+
         return redirect("/login")
 
     cursor = connection.cursor()
@@ -1219,6 +1226,8 @@ def history():
         "history.html",
         history=history_records
     )
+
+
 # =========================================================
 # Search Nearby Services
 # =========================================================
@@ -1488,66 +1497,111 @@ out center tags;
 """
 
         # =================================================
-        # Overpass API Request
+        # Overpass API Request with Fallback Servers
         # =================================================
 
-        url = (
-            "https://overpass-api.de/api/interpreter"
-        )
+        overpass_urls = [
+            "https://overpass-api.de/api/interpreter",
+            "https://overpass.kumi.systems/api/interpreter",
+            "https://overpass.private.coffee/api/interpreter"
+        ]
 
-        try:
+        places = None
 
-            response = requests.get(
-                url,
-                params={
-                    "data": overpass_query
-                },
-                headers={
-                    "User-Agent": "SevaSetu/1.0"
-                },
-                timeout=60
+        last_error = None
+
+        for url in overpass_urls:
+
+            try:
+
+                print(
+                    "TRYING OVERPASS:",
+                    url
+                )
+
+                response = requests.get(
+                    url,
+                    params={
+                        "data": overpass_query
+                    },
+                    headers={
+                        "User-Agent": "SevaSetu/1.0"
+                    },
+                    timeout=25
+                )
+
+                print(
+                    "OVERPASS STATUS:",
+                    response.status_code
+                )
+
+                print(
+                    "OVERPASS RESPONSE:",
+                    response.text[:500]
+                )
+
+                response.raise_for_status()
+
+                places = response.json()
+
+                print(
+                    "OVERPASS SUCCESS:",
+                    url
+                )
+
+                break
+
+            except requests.exceptions.RequestException as e:
+
+                last_error = e
+
+                print(
+                    "OVERPASS FAILED:",
+                    url
+                )
+
+                print(
+                    "ERROR:",
+                    e
+                )
+
+                continue
+
+            except ValueError as e:
+
+                last_error = e
+
+                print(
+                    "OVERPASS JSON ERROR:",
+                    url
+                )
+
+                print(
+                    "ERROR:",
+                    e
+                )
+
+                continue
+
+        # =================================================
+        # All Overpass Servers Failed
+        # =================================================
+
+        if places is None:
+
+            print(
+                "ALL OVERPASS SERVERS FAILED"
             )
 
             print(
-                "OVERPASS STATUS:",
-                response.status_code
-            )
-
-            print(
-                "OVERPASS RESPONSE:",
-                response.text[:500]
-            )
-
-            response.raise_for_status()
-
-            places = response.json()
-
-        except requests.exceptions.RequestException as e:
-
-            print(
-                "OVERPASS ERROR:",
-                e
+                "LAST ERROR:",
+                last_error
             )
 
             return jsonify({
-                "error": (
-                    "Unable to fetch nearby "
-                    "services right now."
-                )
-            }), 500
-
-        except ValueError:
-
-            print(
-                "OVERPASS JSON ERROR"
-            )
-
-            return jsonify({
-                "error": (
-                    "Invalid response received "
-                    "from map service."
-                )
-            }), 500
+                "error":
+                "Nearby services are temporarily unavailable. Please try again."
+            }), 503
 
         # =================================================
         # Prepare Results
