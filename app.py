@@ -72,14 +72,14 @@ app.secret_key = "sevasetu_secret"
 
 
 # =========================================================
-# Gmail SMTP Configuration
+# Brevo SMTP Configuration
 # =========================================================
 
-app.config["MAIL_SERVER"] = "smtp.gmail.com"
-app.config["MAIL_PORT"] = 587
+app.config["MAIL_SERVER"] = "smtp-relay.brevo.com"
+app.config["MAIL_PORT"] = 2525
 app.config["MAIL_USE_TLS"] = True
-app.config["MAIL_USERNAME"] = "smartnearby.app@gmail.com"
-app.config["MAIL_PASSWORD"] = "myjxbaboxvcatcdp"
+app.config["MAIL_USERNAME"] = os.environ.get("BREVO_SMTP_LOGIN")
+app.config["MAIL_PASSWORD"] = os.environ.get("BREVO_SMTP_KEY")
 
 mail = Mail(app)
 
